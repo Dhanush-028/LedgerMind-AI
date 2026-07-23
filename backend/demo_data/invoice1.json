@@ -1,0 +1,11 @@
+{
+  "client_name": "SKS Traders",
+  "invoice_number": "INV-1501",
+  "invoice_date": "2026-06-10",
+  "due_date": "2026-07-12",
+  "gst_amount": 6200,
+  "taxable_amount": 40000,
+  "total": 59000,
+  "gstin": "78PLAQE0234F1Z5",
+  "confidence": "high"
+}

@@ -1,0 +1,11 @@
+{
+  "flagged_invoices": [
+    {
+      "invoice_id": 72,
+      "reason": "Overdue by 190 days with breached ITC status and high risk score (0.85); severe tax credit reversal implications and high bad debt risk.",
+      "recommended_action": "pursue_legally",
+      "urgency": "critical"
+    }
+      ],
+  "summary": "The unpaid invoice portfolio exhibits significant risk concentrated in a few key clients, with several invoices past or approaching the 180-day ITC reversal threshold under Indian GST rules, requiring immediate escalation and legal recovery efforts."
+}

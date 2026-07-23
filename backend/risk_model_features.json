@@ -1,0 +1,1 @@
+{"columns": ["days_since_invoice", "days_overdue", "amount", "gst_amount", "avg_payment_delay_days", "past_default_rate", "terms_days", "sector_Advertising", "sector_Consulting", "sector_F&B", "sector_Healthcare Services", "sector_IT Services", "sector_Logistics", "sector_Manufacturing", "sector_Textiles"]}

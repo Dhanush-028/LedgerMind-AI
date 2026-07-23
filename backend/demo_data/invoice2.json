@@ -1,0 +1,17 @@
+{
+  "client_name": "ABC Traders",
+  "invoice_number": "INV001",
+  "taxable_amount": 50000,
+  "gst_rate": 18,
+  "gst_amount": 9000,
+  "total": 59000,
+
+  "validation": {
+    "gstin_valid": true,
+    "gst_rate_valid": true,
+    "gst_valid": true,
+    "total_valid": true,
+    "split_valid": true,
+    "health_score": 100
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "client_name": "Siva Traders",
+  "invoice_number": "INV-1032",
+  "invoice_date": "2026-05-23",
+  "due_date": "2026-06-19",
+  "taxable_amount": 50000,
+  "gst_amount": 5200,
+  "total": 25000,
+  "gstin": "$3MBODE1234F1M5",
+  "confidence": "High"
+}
