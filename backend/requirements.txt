@@ -12,7 +12,7 @@ scikit-learn==1.4.2
 xgboost==2.0.3
 joblib==1.4.2
 
-opencv-python==4.10.0.84
+opencv-python-headless==4.10.0.84
 
 google-genai==1.28.0
 pydantic==2.11.7
