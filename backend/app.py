@@ -12,7 +12,7 @@ Endpoints:
   GET  /api/clients/risk             -> per-client true-cost ranking
   GET  /api/ai-insight                -> AI copilot: plain-language business health summary
 """
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 import time
 from flask_cors import CORS
 from datetime import date, timedelta
@@ -36,7 +36,11 @@ from datetime import datetime
 
 load_dotenv()  # reads GEMINI_API_KEY (and anything else) from a .env file if present
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_folder="static",
+    static_url_path=""
+)
 CORS(app)
 
 TODAY = date(2026, 7, 19)
@@ -979,6 +983,16 @@ def alerts():
 def health():
     return jsonify({"status": "ok", "as_of_date": TODAY.isoformat()})
 
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_react(path):
+    import os
 
+    static_folder = app.static_folder
+
+    if path != "" and os.path.exists(os.path.join(static_folder, path)):
+        return send_from_directory(static_folder, path)
+
+    return send_from_directory(static_folder, "index.html")
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
