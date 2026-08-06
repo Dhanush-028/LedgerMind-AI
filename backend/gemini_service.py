@@ -82,77 +82,116 @@ def extract_invoice_data(file_bytes: bytes, mime_type: str) -> dict:
         contents=[
             types.Part.from_bytes(data=file_bytes, mime_type=mime_type),
             """
-Extract the invoice details from this GST invoice.
+You are an OCR engine specialized in Indian GST invoices.
+
+Your ONLY job is to read the invoice exactly as printed.
+
+IMPORTANT RULES:
+
+1. Read ONLY the text visible in the invoice.
+
+2. NEVER calculate GST.
+
+3. NEVER calculate Grand Total.
+
+4. NEVER fix arithmetic mistakes.
+
+5. NEVER estimate missing values.
+
+6. NEVER generate sample data.
+
+7. NEVER replace unreadable values.
+
+8. If a field is unreadable, return:
+- "" for text
+- 0 for numbers
 
 Return ONLY valid JSON matching the schema.
 
-Extract:
+Extract EXACTLY these fields:
 
-- client_name
-- invoice_number
-- invoice_date (YYYY-MM-DD)
-- due_date (YYYY-MM-DD)
+client_name
 
-- taxable_amount
+invoice_number
 
-- gst_rate
-  (Allowed values: 0,3,5,12,18,28)
+invoice_date (YYYY-MM-DD)
 
-- gst_amount
+due_date (YYYY-MM-DD)
 
-- cgst
+taxable_amount
 
-- sgst
+gst_rate
 
-- igst
+cgst
 
-- total
+sgst
 
-- gstin
+igst
 
-- confidence
+gst_amount
 
-Rules:
+total
 
-1. Never guess values.
+gstin
 
-2. If GST rate isn't printed,
-calculate it using:
+confidence
 
-GST Rate =
-(gst_amount / taxable_amount) ×100
+VERY IMPORTANT:
 
-3. If invoice is intra-state
+If the invoice shows:
 
-CGST + SGST = GST Amount
+Taxable = 60000
+CGST = 5000
+SGST = 5000
+GST = 10000
+Grand Total = 70000
 
-IGST = 0
+then return EXACTLY:
 
-4. If invoice is interstate
+{
+"taxable_amount":60000,
+"cgst":5000,
+"sgst":5000,
+"igst":0,
+"gst_amount":10000,
+"total":70000
+}
 
-IGST = GST Amount
+DO NOT change GST to 10800.
 
-CGST = 0
+DO NOT change Total to 70800.
 
-SGST = 0
-
-5. If any value is missing,
-return 0.
-
-6. Return ONLY JSON.
+Return exactly what is printed on the invoice.
 """
-            "leave it empty if not clearly printed on the document.",
-        ],
+        ],    
         config={
             "response_mime_type": "application/json",
             "response_schema": InvoiceExtraction,
         },
     )
     data = json.loads(response.text)
+
+    print("========== GEMINI OCR ==========")
+    print(response.text)
+    print("==============================")
+
+# If Gemini didn't return GST amount, derive it from CGST/SGST or IGST
+# Convert numeric fields first
     data["gst_rate"] = float(data.get("gst_rate", 18))
     data["cgst"] = float(data.get("cgst", 0))
     data["sgst"] = float(data.get("sgst", 0))
     data["igst"] = float(data.get("igst", 0))
+    data["gst_amount"] = float(data.get("gst_amount", 0))
+
+# If Gemini didn't return GST amount, derive it from the extracted tax components
+    if data["gst_amount"] == 0:
+
+        if data["cgst"] > 0 or data["sgst"] > 0:
+            data["gst_amount"] = data["cgst"] + data["sgst"]
+
+        elif data["igst"] > 0:
+            data["gst_amount"] = data["igst"]
+
     return data
 
 
