@@ -4,6 +4,6 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "cd backend && gunicorn app:app"
+    "startCommand": "cd backend && gunicorn app:app --timeout 180"
   }
 }
